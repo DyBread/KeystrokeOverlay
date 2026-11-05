@@ -41,19 +41,16 @@ jobs:
             "platforms;android-36" \
             "build-tools;36.0.0"
 
-      - name: Verify SDK
+      - name: Add Android SDK tools to PATH
         run: |
-          sdkmanager --list_installed
-          java -version
-          gradle --version
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | head -n 1)"
 
-      - name: Build Debug APK
-        run: gradle --no-daemon assembleDebug
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager not found!"
+            find "$ANDROID_HOME/cmdline-tools" -maxdepth 3 -type f
+            exit 1
+          fi
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: KeystrokeOverlay-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
+          echo "$(dirname "$SDKMANAGER")" >> "$GITHUB_PATH"
+          echo "Found sdkmanager: $SDKMANAGER"
 
