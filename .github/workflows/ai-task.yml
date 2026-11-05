@@ -1,0 +1,19 @@
+name: AI Task Workflow
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write   # Cho phép AI đọc và ghi file vào repository
+  pull-requests: write # Cho phép tạo Pull Request nếu cần
+
+jobs:
+  ai-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Các bước chạy AI hoặc script của bạn ở đây
+      
